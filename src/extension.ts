@@ -53,6 +53,10 @@ class FrameworkDataProvider implements vscode.TreeDataProvider<FrameworkItem> {
             'Components', 'Proveedor reactivo de dependencias', vscode.TreeItemCollapsibleState.None, [],
             { command: 'rudo.openWebview', title: "Abrir WebView", arguments: ['Flutter Components'] }
           ),
+          new FrameworkItem(
+            'Domain', 'Crea un nuevo dominio para tu app', vscode.TreeItemCollapsibleState.None, [],
+            { command: 'rudo.showProjectPath', title: "Mostrar Ruta del Proyecto" }
+          ),
         ]
       ),
       new FrameworkItem(
@@ -67,6 +71,10 @@ class FrameworkDataProvider implements vscode.TreeDataProvider<FrameworkItem> {
           new FrameworkItem(
             'Components', 'Gestión de estado reactivo', vscode.TreeItemCollapsibleState.None, [],
             { command: 'rudo.openWebview', title: "Abrir WebView", arguments: ['Angular Components'] }
+          ),
+          new FrameworkItem(
+            'Domain', 'Crea un nuevo dominio para tu app', vscode.TreeItemCollapsibleState.None, [],
+            { command: 'rudo.showProjectPath', title: "Mostrar Ruta del Proyecto" }
           ),
         ]
       ),
@@ -83,6 +91,10 @@ class FrameworkDataProvider implements vscode.TreeDataProvider<FrameworkItem> {
             'Components', 'Web Components', vscode.TreeItemCollapsibleState.None, [],
             { command: 'rudo.openWebview', title: "Abrir WebView", arguments: ['Ionic Components'] }
           ),
+          new FrameworkItem(
+            'Domain', 'Crea un nuevo dominio para tu app', vscode.TreeItemCollapsibleState.None, [],
+            { command: 'rudo.showProjectPath', title: "Mostrar Ruta del Proyecto" }
+          ),
         ]
       ),
     ];
@@ -96,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
   const frameworkDataProvider = new FrameworkDataProvider();
   vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
 
-  // Comando para abrir o actualizar la Webview
+  // Comando para abrir Webview
   const openWebviewCommand = vscode.commands.registerCommand('rudo.openWebview', (title: string) => {
     if (!panel) {
       panel = vscode.window.createWebviewPanel(
@@ -113,7 +125,6 @@ export function activate(context: vscode.ExtensionContext) {
         panel = undefined;
       }, null, context.subscriptions);
 
-      // Escuchar mensajes desde la Webview (solo una vez cuando se crea la Webview)
       panel.webview.onDidReceiveMessage((message) => {
         if (message.command === 'showMessage') {
           vscode.window.showInformationMessage(`¡Botón presionado en ${panel?.title}!`);
@@ -123,11 +134,24 @@ export function activate(context: vscode.ExtensionContext) {
       panel.title = title;
     }
 
-    // Actualizar el contenido de la Webview
     panel.webview.html = getWebviewContent(title);
   });
 
   context.subscriptions.push(openWebviewCommand);
+
+  // Comando para mostrar la ruta del proyecto
+  const showProjectPathCommand = vscode.commands.registerCommand('rudo.showProjectPath', () => {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (workspaceFolders && workspaceFolders.length > 0) {
+      const projectPath = workspaceFolders[0].uri.fsPath;
+      console.log(`Ruta del proyecto: ${projectPath}`);
+      vscode.window.showInformationMessage(`Ruta del proyecto: ${projectPath}`);
+    } else {
+      vscode.window.showWarningMessage('No hay ningún proyecto abierto.');
+    }
+  });
+
+  context.subscriptions.push(showProjectPathCommand);
 }
 
 // Función para generar contenido de la Webview con un botón

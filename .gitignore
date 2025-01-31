@@ -8,6 +8,7 @@ node_modules/
 dist/
 coverage/
 .angular/
+.out/
 # Compiled Java class files
 *.class
 
@@ -51,4 +52,4 @@ Thumbs.db
 
 .angular
 .history
-.vscode
+.out

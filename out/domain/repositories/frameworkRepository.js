@@ -33,18 +33,20 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.FrameworkRepository = void 0;
+const frameworkItem_1 = require("../entities/frameworkItem");
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+class FrameworkRepository {
+    getFrameworks() {
+        return [
+            new frameworkItem_1.FrameworkItem('Flutter', 'Librería para interfaces', vscode.TreeItemCollapsibleState.Collapsed, [
+                new frameworkItem_1.FrameworkItem('Views', 'Gestión de estado', vscode.TreeItemCollapsibleState.None, [], { command: 'rudo.openWebview', title: "Abrir WebView", arguments: ['Flutter Views'] }),
+                new frameworkItem_1.FrameworkItem('Components', 'Proveedor reactivo de dependencias', vscode.TreeItemCollapsibleState.None, [], { command: 'rudo.openWebview', title: "Abrir WebView", arguments: ['Flutter Components'] }),
+                new frameworkItem_1.FrameworkItem('Domain', 'Crea un nuevo dominio para tu app', vscode.TreeItemCollapsibleState.None, [], { command: 'rudo.showProjectPath', title: "Mostrar Ruta del Proyecto" }),
+            ]),
+            // ... otros frameworks
+        ];
+    }
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+exports.FrameworkRepository = FrameworkRepository;
+//# sourceMappingURL=frameworkRepository.js.map

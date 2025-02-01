@@ -33,18 +33,26 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.VSCODE_ADAPTER = void 0;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
-}
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+exports.VSCODE_ADAPTER = {
+    createWebviewPanel: (...args) => {
+        try {
+            return vscode.window.createWebviewPanel(...args);
+        }
+        catch (error) {
+            console.error('Failed to create webview panel:', error);
+            throw error;
+        }
+    },
+    asWebviewUri: (uri) => {
+        try {
+            return vscode.Uri.asWebviewUri(uri);
+        }
+        catch (error) {
+            console.error('Failed to convert URI to webview URI:', error);
+            throw error;
+        }
+    }
+};
+//# sourceMappingURL=vscodeAdapter.js.map

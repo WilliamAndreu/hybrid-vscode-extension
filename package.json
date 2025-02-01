@@ -20,7 +20,7 @@
       "activitybar": [
         {
           "id": "rudo-sidebar",
-          "icon": "./src/resources/icon.svg",
+          "icon": "./src/core/resources/icon.svg",
           "title": "Rudo Sidebar"
         }
       ]

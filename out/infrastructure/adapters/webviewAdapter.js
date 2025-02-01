@@ -33,18 +33,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.WebviewAdapter = void 0;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+class WebviewAdapter {
+    static createWebviewPanel(viewType, title, viewColumn, options) {
+        return vscode.window.createWebviewPanel(viewType, title, viewColumn, options);
+    }
+    static asWebviewUri(extensionUri, pathList) {
+        return vscode.Uri.joinPath(extensionUri, ...pathList).with({ scheme: 'vscode-resource' });
+    }
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+exports.WebviewAdapter = WebviewAdapter;
+//# sourceMappingURL=webviewAdapter.js.map

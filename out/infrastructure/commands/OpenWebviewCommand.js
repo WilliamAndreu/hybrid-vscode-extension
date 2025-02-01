@@ -33,18 +33,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.registerOpenWebviewCommand = registerOpenWebviewCommand;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+const WebviewService_1 = require("../../core/services/WebviewService");
+const getWebviewContent_1 = require("../../presentation/views/getWebviewContent");
+function registerOpenWebviewCommand(context) {
+    const openWebviewCommand = vscode.commands.registerCommand('rudo.openWebview', (title) => {
+        const htmlContent = (0, getWebviewContent_1.getWebviewContent)(title);
+        WebviewService_1.WebviewService.createOrShowWebview(title, htmlContent);
+    });
+    context.subscriptions.push(openWebviewCommand);
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=OpenWebviewCommand.js.map

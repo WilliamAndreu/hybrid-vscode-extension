@@ -33,18 +33,27 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.FrameworkItem = void 0;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+class FrameworkItem extends vscode.TreeItem {
+    label;
+    description;
+    collapsibleState;
+    children;
+    command;
+    constructor(label, description, collapsibleState = vscode.TreeItemCollapsibleState.None, children = [], command) {
+        super(label, collapsibleState);
+        this.label = label;
+        this.description = description;
+        this.collapsibleState = collapsibleState;
+        this.children = children;
+        this.command = command;
+        this.tooltip = description;
+        this.description = description;
+        if (command) {
+            this.command = command;
+        }
+    }
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+exports.FrameworkItem = FrameworkItem;
+//# sourceMappingURL=framework_Item.js.map

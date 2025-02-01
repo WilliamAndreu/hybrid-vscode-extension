@@ -33,18 +33,26 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.activateCommands = activateCommands;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+const webviewService_1 = require("../services/webviewService");
+function activateCommands(context) {
+    const webviewService = new webviewService_1.WebviewService();
+    const openWebviewCommand = vscode.commands.registerCommand('rudo.openWebview', (title) => {
+        webviewService.openWebview(title);
+    });
+    context.subscriptions.push(openWebviewCommand);
+    const showProjectPathCommand = vscode.commands.registerCommand('rudo.showProjectPath', () => {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (workspaceFolders && workspaceFolders.length > 0) {
+            const projectPath = workspaceFolders[0].uri.fsPath;
+            console.log(`Ruta del proyecto: ${projectPath}`);
+            vscode.window.showInformationMessage(`Ruta del proyecto: ${projectPath}`);
+        }
+        else {
+            vscode.window.showWarningMessage('No hay ningún proyecto abierto.');
+        }
+    });
+    context.subscriptions.push(showProjectPathCommand);
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=frameworkCommands.js.map

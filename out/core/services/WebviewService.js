@@ -33,18 +33,27 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.WebviewService = void 0;
 const vscode = __importStar(require("vscode"));
-const FrameworkDataProvider_1 = require("./infrastructure/providers/FrameworkDataProvider");
-const OpenWebviewCommand_1 = require("./infrastructure/commands/OpenWebviewCommand");
-const ShowProjectPathCommand_1 = require("./infrastructure/commands/ShowProjectPathCommand");
-function activate(context) {
-    console.log('Extensión activada');
-    const frameworkDataProvider = new FrameworkDataProvider_1.FrameworkDataProvider();
-    vscode.window.registerTreeDataProvider('frameworkSelector', frameworkDataProvider);
-    (0, OpenWebviewCommand_1.registerOpenWebviewCommand)(context);
-    (0, ShowProjectPathCommand_1.registerShowProjectPathCommand)(context);
+class WebviewService {
+    static panel;
+    static createOrShowWebview(title, htmlContent) {
+        if (!this.panel) {
+            this.panel = vscode.window.createWebviewPanel('frameworkWebview', title, vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+            this.panel.onDidDispose(() => {
+                this.panel = undefined;
+            });
+            this.panel.webview.onDidReceiveMessage((message) => {
+                if (message.command === 'showMessage') {
+                    vscode.window.showInformationMessage(`¡Botón presionado en ${this.panel?.title}!`);
+                }
+            });
+        }
+        else {
+            this.panel.title = title;
+        }
+        this.panel.webview.html = htmlContent;
+    }
 }
-function deactivate() { }
-//# sourceMappingURL=extension.js.map
+exports.WebviewService = WebviewService;
+//# sourceMappingURL=WebviewService.js.map

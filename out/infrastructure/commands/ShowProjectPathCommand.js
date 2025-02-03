@@ -35,12 +35,15 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerShowProjectPathCommand = registerShowProjectPathCommand;
 const vscode = __importStar(require("vscode"));
+const log_utils_1 = require("../../core/utils/logs/log.utils");
 function registerShowProjectPathCommand(context) {
     const showProjectPathCommand = vscode.commands.registerCommand('rudo.showProjectPath', () => {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (workspaceFolders && workspaceFolders.length > 0) {
             const projectPath = workspaceFolders[0].uri.fsPath;
             console.log(`Ruta del proyecto: ${projectPath}`);
+            // generateDomainMain(workspaceFolders[0].uri.fsPath);
+            (0, log_utils_1.showImportsDomainModule)({ name: 'user', className: 'User' });
             vscode.window.showInformationMessage(`Ruta del proyecto: ${projectPath}`);
         }
         else {

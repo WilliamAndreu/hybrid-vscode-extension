@@ -73,7 +73,7 @@ async function generateDataFiles(domain) {
         await generateEntityFile(`${domainPath}/entities/${domain.name}/${domain.name}-entity.ts`, domain);
         await generateRepositoryFile(`${domainPath}/repositories/${domain.name}/${domain.name}.repository.ts`, domain);
         await generateUseCaseFile(`${domainPath}/usecases/${domain.name}/get-${domain.name}.usecase.ts`, domain);
-        console.log("✅ \x1b[32m Domain layer created\x1b[0m");
+        console.log("✅ \x1b[32m Data layer created\x1b[0m");
     }
     catch (err) {
         console.error("\x1b[31m Error:", err);

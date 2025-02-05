@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerOpenWebviewCommand = registerOpenWebviewCommand;
 const vscode = __importStar(require("vscode"));
-const WebviewService_1 = require("../../core/services/WebviewService");
+const WebviewService_1 = require("../../core/services/webview/WebviewService");
 const getWebviewContent_1 = require("../../presentation/views/getWebviewContent");
 function registerOpenWebviewCommand(context) {
     const openWebviewCommand = vscode.commands.registerCommand('rudo.openWebview', (title) => {

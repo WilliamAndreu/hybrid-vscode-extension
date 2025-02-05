@@ -1,5 +1,5 @@
 import { createDirectorie } from "../../utils/directories/create_directory.utils";
-import {renderTemplateAndWriteFile } from "../../utils/files/file.utils.";
+import { renderTemplateAndWriteFile } from "../../utils/files/file.utils.";
 import path from "path";
 
 // Función para crear directorios requeridos
@@ -88,7 +88,7 @@ export async function generateDataFiles(domain: { name: string; className: strin
         await generateRepositoryFile(`${domainPath}/repositories/${domain.name}/${domain.name}.repository.ts`, domain);
         await generateUseCaseFile(`${domainPath}/usecases/${domain.name}/get-${domain.name}.usecase.ts`, domain);
 
-        console.log("✅ \x1b[32m Domain layer created\x1b[0m");
+        console.log("✅ \x1b[32m Data layer created\x1b[0m");
     } catch (err) {
         console.error("\x1b[31m Error:", err);
     }

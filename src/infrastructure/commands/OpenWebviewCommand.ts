@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { WebviewService } from '../../core/services/WebviewService';
+import { WebviewService } from '../../core/services/webview/WebviewService';
 import { getWebviewContent } from '../../presentation/views/getWebviewContent';
 
 export function registerOpenWebviewCommand(context: vscode.ExtensionContext) {

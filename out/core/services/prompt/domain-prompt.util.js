@@ -33,22 +33,20 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerShowProjectPathCommand = registerShowProjectPathCommand;
+exports.domainPromptInput = domainPromptInput;
 const vscode = __importStar(require("vscode"));
-const main_1 = require("../../core/scripts/angular/main");
-function registerShowProjectPathCommand(context) {
-    const showProjectPathCommand = vscode.commands.registerCommand('rudo.showProjectPath', () => {
-        const workspaceFolders = vscode.workspace.workspaceFolders;
-        if (workspaceFolders && workspaceFolders.length > 0) {
-            const projectPath = workspaceFolders[0].uri.fsPath;
-            console.log(`Ruta del proyecto: ${projectPath}`);
-            (0, main_1.generateDomainMain)(workspaceFolders[0].uri.fsPath);
-            vscode.window.showInformationMessage(`Ruta del proyecto: ${projectPath}`);
+const environment_1 = require("../../environments/environment");
+async function domainPromptInput() {
+    const options = {
+        prompt: environment_1.environment.DOMAIN_PROMPT,
+        placeHolder: environment_1.environment.DOMAIN_PLACEHOLDER,
+        validateInput: (text) => {
+            if (!text || text.trim().length === 0) {
+                return "Domain name cannot be empty";
+            }
+            return null;
         }
-        else {
-            vscode.window.showWarningMessage('No hay ningún proyecto abierto.');
-        }
-    });
-    context.subscriptions.push(showProjectPathCommand);
+    };
+    return vscode.window.showInputBox(options);
 }
-//# sourceMappingURL=ShowProjectPathCommand.js.map
+//# sourceMappingURL=domain-prompt.util.js.map

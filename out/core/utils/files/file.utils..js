@@ -4,18 +4,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderTemplateAndWriteFile = renderTemplateAndWriteFile;
-const promises_1 = __importDefault(require("fs/promises")); // Usamos fs/promises para trabajar con promesas
+const promises_1 = __importDefault(require("fs/promises"));
 const mustache_1 = __importDefault(require("mustache"));
-// Función para renderizar una plantilla Mustache y escribir el archivo de salida
+const log_utils_1 = require("../logs/log.utils");
 async function renderTemplateAndWriteFile(templatePath, outputPath, data) {
     try {
-        const template = await promises_1.default.readFile(templatePath, "utf8"); // Leer el archivo de plantilla
-        const output = mustache_1.default.render(template, data); // Renderizar la plantilla con los datos
-        await promises_1.default.writeFile(outputPath, output); // Escribir el archivo de salida
-        console.log("\x1b[32m File created successfully:", outputPath);
+        const template = await promises_1.default.readFile(templatePath, "utf8");
+        const output = mustache_1.default.render(template, data);
+        await promises_1.default.writeFile(outputPath, output);
+        (0, log_utils_1.showInOutputChannel)(`File created successfully: ${outputPath}`);
     }
     catch (err) {
-        console.error("\x1b[31m Error creating file:", err);
+        const errorMessage = `\n Error creating file: \n${err}`;
+        throw new Error(errorMessage);
     }
 }
 //# sourceMappingURL=file.utils..js.map

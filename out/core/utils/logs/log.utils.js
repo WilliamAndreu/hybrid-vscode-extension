@@ -36,6 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.showImportsDomainModule = showImportsDomainModule;
 exports.showInOutputChannel = showInOutputChannel;
 const vscode = __importStar(require("vscode"));
+const environment_1 = require("../../environments/environment");
+const error_format_utis_1 = require("../strings/error-format.utis");
 function showImportsDomainModule(domain) {
     const titleImports = `To use the domain you must add these imports in the data.module.ts file:`;
     const titleModuleImp = `Module implementation:`;
@@ -56,22 +58,22 @@ function showImportsDomainModule(domain) {
          { provide: ${domain.className}LocalDataSource, useClass: ${domain.className}LocalDataSourceImp },
 
     `;
-    showInOutputChannel("My Extension Logs", titleImports);
-    showInOutputChannel("My Extension Logs", consoleImports);
-    showInOutputChannel("My Extension Logs", titleModuleImp);
-    showInOutputChannel("My Extension Logs", moduleImp);
+    showInOutputChannel(titleImports);
+    showInOutputChannel(consoleImports);
+    showInOutputChannel(titleModuleImp);
+    showInOutputChannel(moduleImp);
 }
 const outputChannels = {};
-function showInOutputChannel(channelName, message, clearBeforeShow = false) {
-    let outputChannel = outputChannels[channelName];
+function showInOutputChannel(message, isError = false, clearBeforeShow = false) {
+    let outputChannel = outputChannels[environment_1.environment.OUPUT_ID];
     if (!outputChannel) {
-        outputChannel = vscode.window.createOutputChannel(channelName);
-        outputChannels[channelName] = outputChannel;
+        outputChannel = vscode.window.createOutputChannel(environment_1.environment.OUPUT_ID);
+        outputChannels[environment_1.environment.OUPUT_ID] = outputChannel;
     }
     if (clearBeforeShow) {
         outputChannel.clear();
     }
-    outputChannel.appendLine(message);
+    isError ? outputChannel.appendLine((0, error_format_utis_1.formatError)(message)) : outputChannel.appendLine(`${message}`);
     outputChannel.show(true);
 }
 //# sourceMappingURL=log.utils.js.map

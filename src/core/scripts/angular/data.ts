@@ -1,65 +1,56 @@
 import { createDirectorie } from "../../utils/directories/create_directory.utils";
 import { renderTemplateAndWriteFile } from "../../utils/files/file.utils.";
 import path from "path";
+import { showInOutputChannel } from "../../utils/logs/log.utils";
 
-// Función para crear directorios requeridos
-function createRequiredDirectories(domainPath: string, domain: { name: string }): Promise<void[]> {
+async function createRequiredDirectories(domainPath: string, domain: { name: string }): Promise<void> {
     const directories = [
         path.join(domainPath, "entities", domain.name),
         path.join(domainPath, "repositories", domain.name),
         path.join(domainPath, "usecases", domain.name),
     ];
 
-    return Promise.all(
-        directories.map(directory =>
-            new Promise<void>((resolve, reject) => {
-                try {
-                    createDirectorie(directory);
-                    console.log("\x1b[37m Directory created successfully:", directory);
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            })
-        )
-    );
-}
-
-// Función para generar el archivo del repositorio
-function generateRepositoryFile(outputFile: string, domain: { name: string; className: string }): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    for (const directory of directories) {
         try {
-            renderTemplateAndWriteFile(
-                "scripts/generate-domain/templates/domain/repositories/repositories.mustache",
-                outputFile,
-                domain
-            );
-            console.log("\x1b[37m Repositories file generated successfully:", outputFile);
-            resolve();
+            await createDirectorie(directory); // Asume que createDirectorie devuelve una promesa
+            showInOutputChannel( `Directory created successfully: ${directory}`);
         } catch (err) {
-            reject(err);
+            throw err; 
         }
-    });
+    }
 }
 
-// Función para generar el archivo de entidad
-function generateEntityFile(outputFile: string, domain: { name: string; className: string }): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+async function generateRepositoryFile(outputFile: string, domain: { name: string; className: string }): Promise<void> {
+    try {
+        await renderTemplateAndWriteFile(
+            "templates/domain/repositories/repositories.mustache",
+            outputFile,
+            domain
+        );
+        showInOutputChannel(`Repositories file generated successfully: ${outputFile}`);
+    } catch (err) {
+        throw err; 
+    }
+}
+
+
+async function generateEntityFile(outputFile: string, domain: { name: string; className: string }): Promise<void> {
+    
         try {
-            renderTemplateAndWriteFile(
+            await  renderTemplateAndWriteFile(
                 "scripts/generate-domain/templates/domain/entities/entity.mustache",
                 outputFile,
                 domain
             );
-            console.log("\x1b[37m Entity file generated successfully:", outputFile);
-            resolve();
+            
+            showInOutputChannel( `Entity file generated successfully: ${outputFile}`);
+
         } catch (err) {
-            reject(err);
+            throw err; 
         }
-    });
+
 }
 
-// Función para generar el archivo de caso de uso
 function generateUseCaseFile(outputFile: string, domain: { name: string; className: string }): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         try {
@@ -68,7 +59,9 @@ function generateUseCaseFile(outputFile: string, domain: { name: string; classNa
                 outputFile,
                 domain
             );
-            console.log("\x1b[37m UseCase file generated successfully:", outputFile);
+           
+            showInOutputChannel(`UseCase file generated successfully: ${outputFile}`);
+
             resolve();
         } catch (err) {
             reject(err);
@@ -76,20 +69,24 @@ function generateUseCaseFile(outputFile: string, domain: { name: string; classNa
     });
 }
 
-// Función principal para generar archivos del dominio
 export async function generateDataFiles(domain: { name: string; className: string }): Promise<void> {
     const domainPath = `./src/domain/`;
 
     try {
+        
         await createRequiredDirectories(domainPath, domain);
 
-        // Generar archivos
+         
+        //showInOutputChannel( `Holi test :D`);
         await generateEntityFile(`${domainPath}/entities/${domain.name}/${domain.name}-entity.ts`, domain);
-        await generateRepositoryFile(`${domainPath}/repositories/${domain.name}/${domain.name}.repository.ts`, domain);
-        await generateUseCaseFile(`${domainPath}/usecases/${domain.name}/get-${domain.name}.usecase.ts`, domain);
+        
+        
+        
+         await generateRepositoryFile(`${domainPath}/repositories/${domain.name}/${domain.name}.repository.ts`, domain);
+        // await generateUseCaseFile(`${domainPath}/usecases/${domain.name}/get-${domain.name}.usecase.ts`, domain);
+        // showInOutputChannel( `✅ Data layer created`);
 
-        console.log("✅ \x1b[32m Data layer created\x1b[0m");
     } catch (err) {
-        console.error("\x1b[31m Error:", err);
+        throw err; 
     }
 }

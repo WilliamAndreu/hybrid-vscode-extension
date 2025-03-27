@@ -1,11 +1,14 @@
 import fs from "fs/promises"; // Usamos fs/promises para trabajar con promesas
+import { showInOutputChannel } from "../logs/log.utils";
 
 
 export async function createDirectorie(folderPath: string): Promise<void> {
     try {
-        await fs.mkdir(folderPath, { recursive: true }); // Usamos mkdir con opción recursive
-        console.log("\x1b[32m Directories created successfully:", folderPath);
+        await fs.mkdir(folderPath, { recursive: true }); 
++       showInOutputChannel(`Directories created successfully: ${folderPath}`);
+
     } catch (err) {
-        console.error("\x1b[31m Error creating directories:", err);
+        const errorMessage = `\n    Error creating directory "${folderPath}":\n${err}`;
+        throw new Error(errorMessage);
     }
 }

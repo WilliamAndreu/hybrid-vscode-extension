@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import { environment } from "../../environments/environment";
+import { formatError } from "../strings/error-format.utis";
 
 export function showImportsDomainModule(domain: { name: string; className: string }): void {
     const titleImports = `To use the domain you must add these imports in the data.module.ts file:`;
@@ -23,29 +25,28 @@ export function showImportsDomainModule(domain: { name: string; className: strin
 
     `;
 
-    showInOutputChannel("My Extension Logs", titleImports);
-    showInOutputChannel("My Extension Logs", consoleImports);
-    showInOutputChannel("My Extension Logs", titleModuleImp);
-    showInOutputChannel("My Extension Logs", moduleImp);
+    showInOutputChannel(titleImports);
+    showInOutputChannel(consoleImports);
+    showInOutputChannel(titleModuleImp);
+    showInOutputChannel(moduleImp);
 
 }
 
 
 const outputChannels: { [key: string]: vscode.OutputChannel } = {};
 
-export function showInOutputChannel(channelName: string, message: string, clearBeforeShow: boolean = false): void {
-
-    let outputChannel = outputChannels[channelName];
+export function showInOutputChannel( message: string,  isError: boolean = false, clearBeforeShow: boolean = false,): void {
+    let outputChannel = outputChannels[environment.OUPUT_ID];
 
     if (!outputChannel) {
-        outputChannel = vscode.window.createOutputChannel(channelName);
-        outputChannels[channelName] = outputChannel;
+        outputChannel = vscode.window.createOutputChannel(environment.OUPUT_ID);
+        outputChannels[environment.OUPUT_ID] = outputChannel;
     }
 
     if (clearBeforeShow) {
         outputChannel.clear();
     }
-
-    outputChannel.appendLine(message);
+    isError ? outputChannel.appendLine(formatError(message)) : outputChannel.appendLine(`${message}`);
     outputChannel.show(true);
 }
+

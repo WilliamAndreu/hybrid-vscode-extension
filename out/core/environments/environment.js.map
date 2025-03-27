@@ -1,1 +1,1 @@
-{"version":3,"file":"environment.js","sourceRoot":"","sources":["../../../src/core/environments/environment.ts"],"names":[],"mappings":";;;AAAa,QAAA,WAAW,GAAG;IAC1B,kBAAkB,EAAE,4BAA4B;IAChD,aAAa,EAAE,+BAA+B;CAC9C,CAAC"}
+{"version":3,"file":"environment.js","sourceRoot":"","sources":["../../../src/core/environments/environment.ts"],"names":[],"mappings":";;;AAAa,QAAA,WAAW,GAAG;IAC1B,kBAAkB,EAAE,4BAA4B;IAChD,aAAa,EAAE,+BAA+B;IAC9C,QAAQ,EAAE,YAAY;CACtB,CAAC"}

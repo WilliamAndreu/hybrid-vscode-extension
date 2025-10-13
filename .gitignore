@@ -54,3 +54,8 @@ Thumbs.db
 .history
 .out
 out/
+
+# Example content and templates
+example content/
+templantes/
+out/
